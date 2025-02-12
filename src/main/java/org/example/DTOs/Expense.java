@@ -1,7 +1,6 @@
 package org.example.DTOs;
 
 public class Expense {
-
     private int expenseID;
     private String title;
     private String category;
@@ -65,6 +64,15 @@ public class Expense {
         this.dateIncurred = dateIncurred;
     }
 
+    @Override
+    public String toString() {
+        return "Expense - \n" +
+                "expenseID = " + expenseID +
+                ", title = " + title +
+                ", category = " + category +
+                ", amount = " + amount +
+                ", dateIncurred = " + dateIncurred ;
+    }
 
 }
 
