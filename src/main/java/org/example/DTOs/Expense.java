@@ -1,20 +1,22 @@
 package org.example.DTOs;
 
+import java.util.Date;
+
 public class Expense {
     private int expenseID;
     private String title;
     private String category;
     private double amount;
-    private String dateIncurred;
+    private Date dateIncurred;
 
-    public Expense(int expenseID, String title, String category, double amount, String dateIncurred) {
+    public Expense(int expenseID, String title, String category, double amount, Date dateIncurred) {
         this.expenseID = expenseID;
         this.title = title;
         this.category = category;
         this.amount = amount;
         this.dateIncurred = dateIncurred;
     }
-    public Expense(String title, String category, double amount, String dateIncurred) {
+    public Expense(String title, String category, double amount, Date dateIncurred) {
         this.expenseID = 0;
         this.title = title;
         this.category = category;
@@ -56,11 +58,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public String getDateIncurred() {
+    public Date getDateIncurred() {
         return dateIncurred;
     }
 
-    public void setDateIncurred(String dateIncurred) {
+    public void setDateIncurred(Date dateIncurred) {
         this.dateIncurred = dateIncurred;
     }
 
