@@ -14,6 +14,8 @@ public class MySqlDao {
         String username = "root";
         String password = "root";
         Connection connection = null;
+        //If you're running on Windows, you might need to change the port (e.g., to 3306)
+        // and set password to "";
 
         try
         {
