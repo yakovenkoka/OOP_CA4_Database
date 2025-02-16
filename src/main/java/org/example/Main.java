@@ -21,8 +21,11 @@ public class Main {
 
             List<Expense> expenses = IFinanceTracker.getAllExpenses();
             for(Expense expense : expenses){
-                System.out.println(expense);
+                System.out.println("\n" + expense);
             }
+
+            double totalExpenses = IFinanceTracker.calculateTotalExpenses();
+            System.out.println("Total expenses: " + totalExpenses);
 
             Income newIncome = new Income("monthly salary", 1500.00, new Date());
             IFinanceTracker.addIncome(newIncome);
@@ -33,6 +36,12 @@ public class Main {
             for(Income income : incomes){
                 System.out.println("\n" + income);
             }
+
+            double totalIncome = IFinanceTracker.calculateTotalIncome();
+            System.out.println("Total expenses: " + totalIncome);
+
+            IFinanceTracker.displayExpensesAndIncomeForMonth(2025, 2);
+
         } catch (DaoException e){
             e.printStackTrace();
         }

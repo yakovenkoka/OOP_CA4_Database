@@ -10,8 +10,12 @@ public interface FinanceTrackerDaoInterface {
     public List<Expense> getAllExpenses() throws DaoException;
     public Expense addExpense(Expense expense) throws DaoException;
     public boolean deleteExpense(int expenseID) throws DaoException;
+    public double calculateTotalExpenses() throws DaoException;
 
     public List<Income> getAllIncome() throws DaoException;
     public Income addIncome(Income income) throws DaoException;
     public boolean deleteIncome(int incomeID) throws DaoException;
+    public double calculateTotalIncome() throws DaoException;
+
+    public void displayExpensesAndIncomeForMonth(int year, int month) throws DaoException;
 }

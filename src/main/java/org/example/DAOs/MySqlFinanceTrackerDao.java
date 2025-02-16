@@ -126,6 +126,43 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
     }
 
     @Override
+    public double calculateTotalExpenses() throws DaoException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        double total = 0.0;
+
+        try{
+            connection = this.getConnection();
+
+            String query = "SELECT SUM(amount) FROM expenses";
+            preparedStatement = connection.prepareStatement(query);
+
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                total = resultSet.getDouble(1);
+            }
+        } catch (Exception e){
+            throw new DaoException("calculateTotalExpenses() " + e.getMessage());
+        } finally {
+            try{
+                if(resultSet != null){
+                    resultSet.close();
+                }
+                if(preparedStatement != null){
+                    preparedStatement.close();
+                }
+                if(connection != null){
+                    connection.close();
+                }
+            } catch (Exception e){
+                throw new DaoException("calculateTotalExpenses() " + e.getMessage());
+            }
+        }
+        return total;
+    }
+
+    @Override
     public List<Income> getAllIncome() throws DaoException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -234,5 +271,118 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
                 throw new DaoException("deleteIncome() " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public double calculateTotalIncome() throws DaoException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        double total = 0.0;
+
+        try{
+            connection = this.getConnection();
+
+            String query = "SELECT SUM(amount) FROM income";
+            preparedStatement = connection.prepareStatement(query);
+
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                total = resultSet.getDouble(1);
+            }
+        } catch (Exception e){
+            throw new DaoException("calculateTotalIncome() " + e.getMessage());
+        } finally {
+            try{
+                if(resultSet != null){
+                    resultSet.close();
+                }
+                if(preparedStatement != null){
+                    preparedStatement.close();
+                }
+                if(connection != null){
+                    connection.close();
+                }
+            } catch (Exception e){
+                throw new DaoException("calculateTotalIncome() " + e.getMessage());
+            }
+        }
+        return total;
+    }
+
+    public void displayExpensesAndIncomeForMonth(int year, int month) throws DaoException{
+        Connection connection = null;
+        PreparedStatement preparedStatementExpenses = null;
+        PreparedStatement preparedStatementIncome = null;
+        ResultSet resultSet = null;
+
+        try{
+            connection = this.getConnection();
+            String query = "SELECT * FROM income WHERE YEAR (dateEarned) = ? AND MONTH (dateEarned) = ?";
+            preparedStatementIncome = connection.prepareStatement(query);
+            preparedStatementIncome.setInt(1,year);
+            preparedStatementIncome.setInt(2,month);
+
+            double monthIncome = 0.0;
+            double monthExpenses = 0.0;
+
+            resultSet = preparedStatementIncome.executeQuery();
+            System.out.println("Income for month: ");
+
+            while (resultSet.next()){
+                int incomeID = resultSet.getInt("incomeID");
+                String title = resultSet.getString("title");
+                double amount = resultSet.getDouble("amount");
+                Date dateEarned = resultSet.getDate("dateEarned");
+
+                System.out.println("Income ID: " + incomeID + " Title: " + title + " Amount: " + amount + " DateEarned: " + dateEarned);
+                monthIncome += amount;
+            }
+            resultSet.close();
+
+            query = "SELECT * FROM expenses WHERE YEAR (dateIncurred) = ? AND MONTH (dateIncurred) = ?";
+            preparedStatementExpenses = connection.prepareStatement(query);
+            preparedStatementExpenses.setInt(1,year);
+            preparedStatementExpenses.setInt(2,month);
+
+            resultSet = preparedStatementExpenses.executeQuery();
+            System.out.println("Expenses for month: ");
+
+            while (resultSet.next()){
+                int expenseID = resultSet.getInt("expenseID");
+                String title = resultSet.getString("title");
+                String category = resultSet.getString("category");
+                double amount = resultSet.getDouble("amount");
+                Date dateIncurred = resultSet.getDate("dateIncurred");
+
+                System.out.println("Expense ID: " + expenseID + " Title: " + title + " Category" + category + " Amount: " + amount + " DateIncurred: " + dateIncurred);
+                monthExpenses += amount;
+            }
+            System.out.println("\nTotal Expenses: " + monthExpenses);
+            System.out.println("Total Income: " + monthIncome);
+            double leftOver = monthIncome - monthExpenses;
+            System.out.println("Left Over: " + leftOver);
+        }
+        catch (Exception e){
+            throw new DaoException("displayExpensesAndIncomeForMonth() " + e.getMessage());
+        } finally {
+            try{
+                if(resultSet != null){
+                    resultSet.close();
+                }
+                if(preparedStatementExpenses != null){
+                    preparedStatementExpenses.close();
+                }
+                if(preparedStatementIncome != null){
+                    preparedStatementIncome.close();
+                }
+                if(connection != null){
+                    connection.close();
+                }
+            } catch (Exception e){
+                throw new DaoException("displayExpensesAndIncomeForMonth() " + e.getMessage());
+            }
+        }
+
     }
 }
