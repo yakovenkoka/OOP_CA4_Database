@@ -341,7 +341,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
             double monthExpenses = 0.0;
 
             resultSet = preparedStatementIncome.executeQuery();
-            System.out.println("Income for month: ");
+            System.out.println("\nIncome for month: ");
 
             while (resultSet.next()){
                 int incomeID = resultSet.getInt("incomeID");
@@ -349,7 +349,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
                 double amount = resultSet.getDouble("amount");
                 Date dateEarned = resultSet.getDate("dateEarned");
 
-                System.out.println("Income ID: " + incomeID + " Title: " + title + " Amount: " + amount + " DateEarned: " + dateEarned);
+                System.out.println("Income ID: " + incomeID + ", Title:'" + title + '\'' + ", Amount: " + amount + ", DateEarned: " + dateEarned);
                 monthIncome += amount;
             }
             resultSet.close();
@@ -361,7 +361,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
             preparedStatementExpenses.setInt(2,month);
 
             resultSet = preparedStatementExpenses.executeQuery();
-            System.out.println("Expenses for month: ");
+            System.out.println("\nExpenses for month: ");
 
             while (resultSet.next()){
                 int expenseID = resultSet.getInt("expenseID");
@@ -370,11 +370,11 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
                 double amount = resultSet.getDouble("amount");
                 Date dateIncurred = resultSet.getDate("dateIncurred");
 
-                System.out.println("Expense ID: " + expenseID + " Title: " + title + " Category" + category + " Amount: " + amount + " DateIncurred: " + dateIncurred);
+                System.out.println("Expense ID: " + expenseID + ", Title:'" + title + '\'' + ", Category" + category + ", Amount: " + amount + ", DateIncurred: " + dateIncurred);
                 monthExpenses += amount;
             }
-            System.out.println("\nTotal Expenses: " + monthExpenses);
-            System.out.println("Total Income: " + monthIncome);
+            System.out.println("\nTotal Expenses for the month: " + monthExpenses);
+            System.out.println("Total Income for the month: " + monthIncome);
             double leftOver = monthIncome - monthExpenses;
             System.out.println("Left Over: " + leftOver);
         }
