@@ -1,4 +1,4 @@
-package org.example;
+package org.example.BusinessObjects;
 
 import org.example.DAOs.FinanceTrackerDaoInterface;
 import org.example.DAOs.MySqlFinanceTrackerDao;
