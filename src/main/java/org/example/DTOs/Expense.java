@@ -68,9 +68,9 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "Expense - \n" +
+        return "Expense: " +
                 "expenseID = " + expenseID +
-                ", title = " + title +
+                ", title = '" + title + '\'' +
                 ", category = " + category +
                 ", amount = " + amount +
                 ", dateIncurred = " + dateIncurred ;

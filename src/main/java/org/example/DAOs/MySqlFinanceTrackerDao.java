@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDaoInterface {
+    //Retrieve all expenses from the database
     @Override
     public List<Expense> getAllExpenses() throws DaoException{
         Connection connection = null;
@@ -56,6 +57,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return expensesList;
     }
 
+    //Add a new expense to the database
     @Override
     public Expense addExpense(Expense expense) throws DaoException {
         Connection connection = null;
@@ -91,6 +93,8 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return expense;
     }
 
+    //Delete an expense by its ID
+    @Override
     public boolean deleteExpense(int expenseID) throws DaoException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -125,6 +129,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         }
     }
 
+    //Calculate the total sum of all expenses
     @Override
     public double calculateTotalExpenses() throws DaoException{
         Connection connection = null;
@@ -162,6 +167,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return total;
     }
 
+    //Retrieve all income from the database
     @Override
     public List<Income> getAllIncome() throws DaoException{
         Connection connection = null;
@@ -205,6 +211,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return incomeList;
     }
 
+    //Add a new income to the database
     @Override
     public Income addIncome(Income income) throws DaoException {
         Connection connection = null;
@@ -239,6 +246,8 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return income;
     }
 
+    //Delete an income by its ID
+    @Override
     public boolean deleteIncome(int incomeID) throws DaoException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -273,6 +282,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         }
     }
 
+    //Calculate the total sum of all income
     @Override
     public double calculateTotalIncome() throws DaoException{
         Connection connection = null;
@@ -310,6 +320,8 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
         return total;
     }
 
+    //Display all expenses and income for a specific month
+    @Override
     public void displayExpensesAndIncomeForMonth(int year, int month) throws DaoException{
         Connection connection = null;
         PreparedStatement preparedStatementExpenses = null;
@@ -318,6 +330,8 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
 
         try{
             connection = this.getConnection();
+
+            //Retrieve income for the month
             String query = "SELECT * FROM income WHERE YEAR (dateEarned) = ? AND MONTH (dateEarned) = ?";
             preparedStatementIncome = connection.prepareStatement(query);
             preparedStatementIncome.setInt(1,year);
@@ -327,7 +341,7 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
             double monthExpenses = 0.0;
 
             resultSet = preparedStatementIncome.executeQuery();
-            System.out.println("Income for month: ");
+            System.out.println("\nIncome for month: ");
 
             while (resultSet.next()){
                 int incomeID = resultSet.getInt("incomeID");
@@ -335,18 +349,19 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
                 double amount = resultSet.getDouble("amount");
                 Date dateEarned = resultSet.getDate("dateEarned");
 
-                System.out.println("Income ID: " + incomeID + " Title: " + title + " Amount: " + amount + " DateEarned: " + dateEarned);
+                System.out.println("Income ID: " + incomeID + ", Title:'" + title + '\'' + ", Amount: " + amount + ", DateEarned: " + dateEarned);
                 monthIncome += amount;
             }
             resultSet.close();
 
+            //Retrieve expenses for the month
             query = "SELECT * FROM expenses WHERE YEAR (dateIncurred) = ? AND MONTH (dateIncurred) = ?";
             preparedStatementExpenses = connection.prepareStatement(query);
             preparedStatementExpenses.setInt(1,year);
             preparedStatementExpenses.setInt(2,month);
 
             resultSet = preparedStatementExpenses.executeQuery();
-            System.out.println("Expenses for month: ");
+            System.out.println("\nExpenses for month: ");
 
             while (resultSet.next()){
                 int expenseID = resultSet.getInt("expenseID");
@@ -355,11 +370,11 @@ public class MySqlFinanceTrackerDao extends MySqlDao implements FinanceTrackerDa
                 double amount = resultSet.getDouble("amount");
                 Date dateIncurred = resultSet.getDate("dateIncurred");
 
-                System.out.println("Expense ID: " + expenseID + " Title: " + title + " Category" + category + " Amount: " + amount + " DateIncurred: " + dateIncurred);
+                System.out.println("Expense ID: " + expenseID + ", Title:'" + title + '\'' + ", Category" + category + ", Amount: " + amount + ", DateIncurred: " + dateIncurred);
                 monthExpenses += amount;
             }
-            System.out.println("\nTotal Expenses: " + monthExpenses);
-            System.out.println("Total Income: " + monthIncome);
+            System.out.println("\nTotal Expenses for the month: " + monthExpenses);
+            System.out.println("Total Income for the month: " + monthIncome);
             double leftOver = monthIncome - monthExpenses;
             System.out.println("Left Over: " + leftOver);
         }

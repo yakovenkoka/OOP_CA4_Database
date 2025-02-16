@@ -58,9 +58,9 @@ public class Income {
 
     @Override
     public String toString() {
-        return "Income - \n" +
+        return "Income: " +
                 "incomeID = " + incomeID +
-                ", title='" + title +
+                ", title = '" + title + '\'' +
                 ", amount = " + amount +
                 ", dateEarned = " + dateEarned;
     }
